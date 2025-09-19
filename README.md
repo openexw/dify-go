@@ -1,2 +1,4 @@
 # dify-go
-Go SDK for Langfuse: https://dify.ai
+Go SDK for Dify: https://dify.ai
+
+https://docs.dify.ai/api-reference/chat/send-chat-message
