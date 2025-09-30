@@ -1,0 +1,11 @@
+syntax = "proto3";
+
+package meta.v1;
+option go_package = "github.com/openexw/dify-go/api/meta/v1";
+
+message Page {
+  // Page number. default is 1.
+  int32 page = 1;
+  // Number of items per page. default is 20.
+  int32 limit = 2;
+}

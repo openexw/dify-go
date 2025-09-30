@@ -2,6 +2,7 @@ syntax = "proto3";
 
 package feedback.v1;
 option go_package = "github.com/openexw/dify-go/api/feedback/v1";
+import "meta/meta.proto";
 
 message CreateRequest {
   //  Message ID for which feedback is being provided.
@@ -9,12 +10,12 @@ message CreateRequest {
   //  User identifier, defined by the developer's rules, must be unique within the application.
   string user = 2;
   // Rating for the message.
-  rating rating = 3;
+  Rating rating = 3;
   // The specific content of message feedback.
   string content = 4;
 }
 
-enum rating {
+enum Rating {
   rating_unspecified = 0;
   like = 1;
   dislike = 2;
@@ -23,4 +24,29 @@ enum rating {
 message CreateResponse {
   // Feedback submitted successfully.
   string result = 1;
+}
+
+message GetRequest {
+  //  Message ID for which feedback is being provided.
+  string message_id = 1 [json_name = "-"];
+  //  User identifier, defined by the developer's rules, must be unique within the application.
+  meta.v1.Page page = 2;
+}
+
+message GetResponse {
+  // Feedback list.
+  repeated Feedback data = 1;
+}
+message Feedback {
+  string id = 1;
+  string app_id = 2;
+  string conversation_id = 3;
+  string message_id = 4;
+  Rating rating = 5;
+  string content = 6;
+  string from_source = 7;
+  string from_end_user_id = 8;
+  string from_account_id = 9;
+  string created_at = 10;
+  string updated_at = 11;
 }
