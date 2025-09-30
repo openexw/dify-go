@@ -5,9 +5,13 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="48b32da2-1c72-4803-901e-c935801e86b7" name="Changes" comment="add workflow">
+      <change afterPath="$PROJECT_DIR$/api/makefile" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/api/workflow/v1/workflow.proto" beforeDir="false" afterPath="$PROJECT_DIR$/api/workflow/v1/workflow.proto" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/workflow/workflow.go" beforeDir="false" afterPath="$PROJECT_DIR$/workflow/workflow.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/buf.gen.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/api/buf.gen.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/buf.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/api/buf.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client.go" beforeDir="false" afterPath="$PROJECT_DIR$/client.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/makefile" beforeDir="false" afterPath="$PROJECT_DIR$/makefile" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/workflow.go" beforeDir="false" afterPath="$PROJECT_DIR$/workflow.go" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -66,12 +70,20 @@
     "git-widget-placeholder": "dev",
     "go.import.settings.migrated": "true",
     "go.sdk.automatically.set": "true",
-    "last_opened_file_path": "/Users/boohee/Workspace/llms/dify-go",
+    "last_opened_file_path": "/Users/boohee/Workspace/llms/dify-go/api",
     "node.js.detected.package.eslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
     "nodejs_package_manager_path": "npm"
   }
 }]]></component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/api" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$" />
+    </key>
+  </component>
   <component name="RunManager">
     <configuration name="generate" type="MAKEFILE_TARGET_RUN_CONFIGURATION" factoryName="Makefile" temporary="true">
       <makefile filename="$PROJECT_DIR$/makefile" target="generate" workingDirectory="" arguments="">

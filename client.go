@@ -2,15 +2,13 @@ package dify
 
 import "resty.dev/v3"
 
-import "github.com/openexw/dify-go/workflow"
-
 type client struct {
 	rest     *resty.Client
-	workflow workflow.Workflow
+	workflow Workflow
 }
 
 type Client interface {
-	Workflow(appKey string) workflow.Workflow
+	Workflow(appKey string) Workflow
 }
 
 func NewClient() Client {
@@ -20,6 +18,6 @@ func NewClient() Client {
 	}
 }
 
-func (cli *client) Workflow(appKey string) workflow.Workflow {
-	return workflow.NewWorkflow(cli.rest, appKey)
+func (cli *client) Workflow(appKey string) Workflow {
+	return NewWorkflow(cli.rest, appKey)
 }
