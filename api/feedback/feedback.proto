@@ -1,0 +1,26 @@
+syntax = "proto3";
+
+package feedback.v1;
+option go_package = "github.com/openexw/dify-go/api/feedback/v1";
+
+message CreateRequest {
+  //  Message ID for which feedback is being provided.
+  string message_id = 1 [json_name = "-"];
+  //  User identifier, defined by the developer's rules, must be unique within the application.
+  string user = 2;
+  // Rating for the message.
+  rating rating = 3;
+  // The specific content of message feedback.
+  string content = 4;
+}
+
+enum rating {
+  rating_unspecified = 0;
+  like = 1;
+  dislike = 2;
+}
+
+message CreateResponse {
+  // Feedback submitted successfully.
+  string result = 1;
+}

@@ -4,10 +4,9 @@
     <option name="autoReloadType" value="ALL" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="48b32da2-1c72-4803-901e-c935801e86b7" name="Changes" comment="Organize project folders">
-      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+    <list default="true" id="48b32da2-1c72-4803-901e-c935801e86b7" name="Changes" comment="add unit test">
+      <change afterPath="$PROJECT_DIR$/api/feedback/feedback.proto" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/makefile" beforeDir="false" afterPath="$PROJECT_DIR$/makefile" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -118,7 +117,8 @@
     <MESSAGE value="ignore .idea" />
     <MESSAGE value="add workflow" />
     <MESSAGE value="Organize project folders" />
-    <option name="LAST_COMMIT_MESSAGE" value="Organize project folders" />
+    <MESSAGE value="add unit test" />
+    <option name="LAST_COMMIT_MESSAGE" value="add unit test" />
   </component>
   <component name="VgoProject">
     <settings-migrated>true</settings-migrated>
