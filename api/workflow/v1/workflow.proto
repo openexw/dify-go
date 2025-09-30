@@ -1,0 +1,86 @@
+syntax = "proto3";
+
+package workflow.v1;
+option go_package = "github.com/openexw/dify-go/api/workflow/v1";
+
+enum ResponseMode {
+  ResponseMode_Unspecified = 0;
+  streaming = 1;
+  blocking = 2;
+}
+
+
+message RunRequest {
+  //  Response mode. Cloudflare timeout is 100s for blocking.
+  ResponseMode response_mode = 1;
+  // User identifier.
+  string user = 2;
+}
+
+message RunBlockingResponse {
+  // Workflow run ID.
+  string workflow_run_id = 1;
+  string task_id = 2;
+  Detail data = 3;
+}
+
+
+message Detail {
+  string id = 1;
+  string workflow_id = 2;
+  Status status = 3;
+  string error = 4;
+  string created_at = 5;
+  string finished_at = 6;
+  bytes outputs = 7;
+  int32 total_tokens = 8;
+  int32 total_steps = 9;
+}
+
+enum Status {
+  Status_Unspecified = 0;
+  running = 1;
+  succeeded = 2;
+  failed = 3;
+  stopped = 4;
+}
+
+message StopResponse {
+  // Operation successful.
+  string result = 1;
+}
+
+message LogsRequest {
+  // Keyword to search.
+  string keyword = 1;
+  // Status to filter.
+  Status status = 2;
+  // Page number. default is 1.
+  int32 page = 3;
+  // Number of items per page. default is 20.
+  int32 limit = 4;
+}
+
+message LogsResponse {
+  int32 page = 1;
+  int32 limit = 2;
+  int32 total = 3;
+  bool has_more = 4;
+  repeated Log logs = 5;
+}
+
+message Log {
+  string id = 1;
+  Detail workflow_run = 2;
+  string created_from = 3;
+  string created_by_role = 4;
+  string created_by_account = 5;
+  User created_by_end_user = 6;
+  uint32 created_at = 7;
+  message User {
+    string id = 1;
+    string type = 2;
+    bool is_anonymous = 3;
+    string session_id = 4;
+  }
+}
