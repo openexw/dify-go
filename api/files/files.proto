@@ -1,0 +1,34 @@
+syntax = "proto3";
+
+package workflow.v1;
+option go_package = "github.com/openexw/dify-go/api/files/v1";
+
+message UploadRequest {
+  // File to upload.
+  bytes file = 1;
+  // user identifier.
+  string user = 2;
+}
+
+message UploadResponse {
+  // file ID.
+  string id = 1;
+  // file name.
+  string name = 2;
+  // file size.
+  uint32 size = 3;
+  // file extension.
+  string extension = 4;
+  // file mime type.
+  string mime_type = 5;
+  // user identifier.
+  string created_by = 6;
+  // file created at.
+  uint32 created_at = 7;
+}
+message GetFileQuery {
+  // The unique identifier of the file to preview, obtained from the File Upload API response.
+  string file_id = 1;
+  // Whether to force download the file as an attachment. Default is false (preview in browser).
+  bool as_attachment = 2;
+}
