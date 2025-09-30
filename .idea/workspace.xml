@@ -4,17 +4,10 @@
     <option name="autoReloadType" value="ALL" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="48b32da2-1c72-4803-901e-c935801e86b7" name="Changes" comment="ignore .idea">
-      <change afterPath="$PROJECT_DIR$/api/workflow/v1/workflow.proto" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/buf.gen.yaml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/buf.yaml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/chatflow/chatflow.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/makefile" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/workflow/workflow.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+    <list default="true" id="48b32da2-1c72-4803-901e-c935801e86b7" name="Changes" comment="add workflow">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client.go" beforeDir="false" afterPath="$PROJECT_DIR$/client.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/workflow.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/workflow/v1/workflow.proto" beforeDir="false" afterPath="$PROJECT_DIR$/api/workflow/v1/workflow.proto" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/workflow/workflow.go" beforeDir="false" afterPath="$PROJECT_DIR$/workflow/workflow.go" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -115,7 +108,8 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="ignore .idea" />
-    <option name="LAST_COMMIT_MESSAGE" value="ignore .idea" />
+    <MESSAGE value="add workflow" />
+    <option name="LAST_COMMIT_MESSAGE" value="add workflow" />
   </component>
   <component name="VgoProject">
     <settings-migrated>true</settings-migrated>

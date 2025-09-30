@@ -44,6 +44,12 @@ enum Status {
   failed = 3;
   stopped = 4;
 }
+message StopRequest {
+  // Task ID from the streaming chunk.
+  string task_id = 1[json_name = "-"];
+  // User identifier.
+  string user = 2;
+}
 
 message StopResponse {
   // Operation successful.

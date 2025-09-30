@@ -19,7 +19,7 @@ type Workflow interface {
 	// Detail Retrieve the current execution results of a workflow task based on the workflow execution ID.
 	Detail(ctx context.Context, workflowRunId string) (*workflowv1.Detail, error)
 	// Stop the execution of a workflow task based on the workflow execution ID.
-	Stop(ctx context.Context, taskId string) (*workflowv1.StopResponse, error)
+	Stop(ctx context.Context, param workflowv1.StopRequest) (*workflowv1.StopResponse, error)
 	// Logs Returns workflow logs, with the first page returning the latest {limit} messages, i.e., in reverse order.
 	Logs(ctx context.Context, filter workflowv1.LogsRequest) (*workflowv1.LogsResponse, error)
 }
@@ -64,19 +64,42 @@ func (w *workflow) RunStream(ctx context.Context, request workflowv1.RunRequest,
 	return nil
 }
 
-func (w *workflow) Detail(ctx context.Context, workflowRunId string) (*workflowv1.Detail, error) {
-	//TODO implement me
-	panic("implement me")
+func (w *workflow) Detail(ctx context.Context, workflowRunId string) (resp *workflowv1.Detail, err error) {
+	_, err = w.rest.R().
+		WithContext(ctx).
+		SetHeader("Authorization", "Bearer "+w.appKey).
+		SetResult(&resp).
+		Get("/workflows/run/" + workflowRunId)
+	if err != nil {
+		return nil, errors.New(err.Error())
+	}
+	return resp, nil
 }
 
-func (w *workflow) Logs(ctx context.Context, filter workflowv1.LogsRequest) (*workflowv1.LogsResponse, error) {
-	//TODO implement me
-	panic("implement me")
+func (w *workflow) Logs(ctx context.Context, filter workflowv1.LogsRequest) (resp *workflowv1.LogsResponse, err error) {
+	_, err = w.rest.R().
+		WithContext(ctx).
+		SetHeader("Authorization", "Bearer "+w.appKey).
+		SetResult(&resp).
+		SetBody(filter).
+		Post("/workflows/logs")
+	if err != nil {
+		return nil, errors.New(err.Error())
+	}
+	return resp, nil
 }
 
-func (w *workflow) Stop(ctx context.Context, taskId string) (*workflowv1.StopResponse, error) {
-	//TODO implement me
-	panic("implement me")
+func (w *workflow) Stop(ctx context.Context, param workflowv1.StopRequest) (*workflowv1.StopResponse, error) {
+	_, err := w.rest.R().
+		WithContext(ctx).
+		SetHeader("Authorization", "Bearer "+w.appKey).
+		SetResult(&workflowv1.StopResponse{}).
+		SetBody(param).
+		Post("/workflows/run/" + param.TaskId + "/stop")
+	if err != nil {
+		return nil, errors.New(err.Error())
+	}
+	return &workflowv1.StopResponse{Result: "success"}, nil
 }
 
 func NewWorkflow(rest *resty.Client, appKey string) Workflow {
