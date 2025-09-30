@@ -4,4 +4,5 @@ go 1.24.7
 
 require (
 	 resty.dev/v3 v3.0.0-beta.3
+	 github.com/stretchr/testify/assert v1.10.0
 )

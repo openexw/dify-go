@@ -32,12 +32,12 @@ type workflow struct {
 func (w *workflow) Run(ctx context.Context, request workflowv1.RunRequest) (resp *workflowv1.RunBlockingResponse, err error) {
 	_, err = w.rest.R().
 		WithContext(ctx).
-		SetHeader("x-api-key", w.appKey).
+		SetHeader("Authorization", "Bearer "+w.appKey).
 		SetBody(request).
 		SetResult(&resp).
 		Post("/workflows/run")
 	if err != nil {
-		return nil, errors.ErrUnsupported
+		return nil, errors.New("workflow run failed: " + err.Error())
 	}
 	if resp == nil {
 		return nil, errors.ErrUnsupported
@@ -51,7 +51,7 @@ func (w *workflow) RunStream(ctx context.Context, request workflowv1.RunRequest,
 		return err
 	}
 	es := resty.NewEventSource().
-		SetHeader("x-api-key", w.appKey).
+		SetHeader("Authorization", "Bearer "+w.appKey).
 		SetMethod(http.MethodPost).
 		SetBody(bytes.NewBuffer(reqBytes)).
 		OnMessage(func(a any) {
