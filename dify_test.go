@@ -5,7 +5,6 @@ import (
 
 	"github.com/openexw/dify-go"
 	"github.com/stretchr/testify/assert"
-	"resty.dev/v3"
 )
 
 // TestNewClient tests the creation of a new Dify client

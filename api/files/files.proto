@@ -26,9 +26,15 @@ message UploadResponse {
   // file created at.
   uint32 created_at = 7;
 }
-message GetFileQuery {
+
+message PreviewRequest {
   // The unique identifier of the file to preview, obtained from the File Upload API response.
   string file_id = 1;
   // Whether to force download the file as an attachment. Default is false (preview in browser).
   bool as_attachment = 2;
+}
+
+message PreviewResponse {
+  // file content.
+  bytes content = 1;
 }

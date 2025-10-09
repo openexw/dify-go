@@ -8,13 +8,14 @@ import (
 
 	"github.com/go-resty/resty/v2"
 	workflowv1 "github.com/openexw/dify-go/api/workflow/v1"
+	"github.com/openexw/dify-go/sse"
 )
 
 type Workflow interface {
 	// Run workflow. Cannot be executed without a published workflow.
 	Run(ctx context.Context, request workflowv1.RunRequest) (*workflowv1.RunBlockingResponse, error)
 	// RunStream workflow. Cannot be executed without a published workflow.
-	RunStream(ctx context.Context, request workflowv1.RunRequest, fn func(v any)) error
+	RunStream(ctx context.Context, request workflowv1.RunRequest, fn func(v *sse.Event)) error
 	// Detail Retrieve the current execution results of a workflow task based on the workflow execution ID.
 	Detail(ctx context.Context, workflowRunId string) (*workflowv1.Detail, error)
 	// Stop the execution of a workflow task based on the workflow execution ID.
@@ -31,7 +32,7 @@ type workflow struct {
 func (w *workflow) Run(ctx context.Context, request workflowv1.RunRequest) (resp *workflowv1.RunBlockingResponse, err error) {
 	_, err = w.rest.R().
 		SetContext(ctx).
-		SetHeader("Authorization", "Bearer "+w.appKey).
+		SetHeader("Authorization", w.builderAuthz()).
 		SetBody(request).
 		SetResult(&resp).
 		Post("/workflows/run")
@@ -44,38 +45,47 @@ func (w *workflow) Run(ctx context.Context, request workflowv1.RunRequest) (resp
 	return resp, nil
 }
 
-func (w *workflow) RunStream(ctx context.Context, request workflowv1.RunRequest, fn func(v any)) error {
+func (w *workflow) RunStream(ctx context.Context, request workflowv1.RunRequest, fn func(v *sse.Event)) error {
 	reqBytes, err := json.Marshal(request)
 	if err != nil {
 		return err
 	}
-	//es := resty.NewEventSource().
-	//	SetHeader("Authorization", "Bearer "+w.appKey).
-	//	SetMethod(http.MethodPost).
-	//	SetBody(bytes.NewBuffer(reqBytes)).
-	//	OnMessage(func(a any) {
-	//		fn(a)
-	//	}, nil)
-	//err = es.Get()
-	//if err != nil {
-	//	return err
-	//}
-	resp, err := w.rest.R().SetContext(ctx).
-		SetHeader("Authorization", "Bearer "+w.appKey).
+
+	headers := map[string]string{
+		"Accept":        "text/event-stream",
+		"Cache-Control": "no-cache",
+		"Connection":    "keep-alive",
+	}
+	res, err := w.rest.R().SetContext(ctx).
+		SetHeader("Authorization", w.builderAuthz()).
+		SetHeaders(headers).
 		SetBody(bytes.NewBuffer(reqBytes)).
 		Post("/workflows/run")
 	if err != nil {
 		return err
 	}
-	//resp.RawResponse.Body()
-	fn(resp.RawResponse)
+
+	s := sse.New(res.RawResponse)
+	//lastID, exists := s.LastEventID.Load().([]byte)
+	//if exists && lastID != nil {
+	//	lastEventID = string(lastID)
+	//}
+	err = s.Subscribe(ctx, func(msg *sse.Event) {
+		if msg.Data != nil {
+			fn(msg)
+			return
+		}
+	})
+	if err != nil {
+		return err
+	}
 	return nil
 }
 
 func (w *workflow) Detail(ctx context.Context, workflowRunId string) (resp *workflowv1.Detail, err error) {
 	_, err = w.rest.R().
 		SetContext(ctx).
-		SetHeader("Authorization", "Bearer "+w.appKey).
+		SetHeader("Authorization", w.builderAuthz()).
 		SetResult(&resp).
 		Get("/workflows/run/" + workflowRunId)
 	if err != nil {
@@ -87,7 +97,7 @@ func (w *workflow) Detail(ctx context.Context, workflowRunId string) (resp *work
 func (w *workflow) Logs(ctx context.Context, filter workflowv1.LogsRequest) (resp *workflowv1.LogsResponse, err error) {
 	_, err = w.rest.R().
 		SetContext(ctx).
-		SetHeader("Authorization", "Bearer "+w.appKey).
+		SetHeader("Authorization", w.builderAuthz()).
 		SetResult(&resp).
 		SetBody(filter).
 		Post("/workflows/logs")
@@ -100,7 +110,7 @@ func (w *workflow) Logs(ctx context.Context, filter workflowv1.LogsRequest) (res
 func (w *workflow) Stop(ctx context.Context, param workflowv1.StopRequest) (*workflowv1.StopResponse, error) {
 	_, err := w.rest.R().
 		SetContext(ctx).
-		SetHeader("Authorization", "Bearer "+w.appKey).
+		SetHeader("Authorization", w.builderAuthz()).
 		SetResult(&workflowv1.StopResponse{}).
 		SetBody(param).
 		Post("/workflows/run/" + param.TaskId + "/stop")
@@ -112,4 +122,8 @@ func (w *workflow) Stop(ctx context.Context, param workflowv1.StopRequest) (*wor
 
 func NewWorkflow(rest *resty.Client, appKey string) Workflow {
 	return &workflow{rest: rest, appKey: appKey}
+}
+
+func (w *workflow) builderAuthz() string {
+	return "Bearer " + w.appKey
 }

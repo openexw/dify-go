@@ -30,7 +30,7 @@ message GetRequest {
   //  Message ID for which feedback is being provided.
   string message_id = 1 [json_name = "-"];
   //  User identifier, defined by the developer's rules, must be unique within the application.
-  meta.v1.Page page = 2;
+  meta.Page page = 2;
 }
 
 message GetResponse {
