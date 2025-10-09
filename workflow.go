@@ -2,13 +2,12 @@ package dify
 
 import (
 	"bytes"
+	"context"
 	"encoding/json"
 	"errors"
-	"net/http"
 
+	"github.com/go-resty/resty/v2"
 	workflowv1 "github.com/openexw/dify-go/api/workflow/v1"
-	"golang.org/x/net/context"
-	"resty.dev/v3"
 )
 
 type Workflow interface {
@@ -31,7 +30,7 @@ type workflow struct {
 
 func (w *workflow) Run(ctx context.Context, request workflowv1.RunRequest) (resp *workflowv1.RunBlockingResponse, err error) {
 	_, err = w.rest.R().
-		WithContext(ctx).
+		SetContext(ctx).
 		SetHeader("Authorization", "Bearer "+w.appKey).
 		SetBody(request).
 		SetResult(&resp).
@@ -50,23 +49,32 @@ func (w *workflow) RunStream(ctx context.Context, request workflowv1.RunRequest,
 	if err != nil {
 		return err
 	}
-	es := resty.NewEventSource().
+	//es := resty.NewEventSource().
+	//	SetHeader("Authorization", "Bearer "+w.appKey).
+	//	SetMethod(http.MethodPost).
+	//	SetBody(bytes.NewBuffer(reqBytes)).
+	//	OnMessage(func(a any) {
+	//		fn(a)
+	//	}, nil)
+	//err = es.Get()
+	//if err != nil {
+	//	return err
+	//}
+	resp, err := w.rest.R().SetContext(ctx).
 		SetHeader("Authorization", "Bearer "+w.appKey).
-		SetMethod(http.MethodPost).
 		SetBody(bytes.NewBuffer(reqBytes)).
-		OnMessage(func(a any) {
-			fn(a)
-		}, nil)
-	err = es.Get()
+		Post("/workflows/run")
 	if err != nil {
 		return err
 	}
+	//resp.RawResponse.Body()
+	fn(resp.RawResponse)
 	return nil
 }
 
 func (w *workflow) Detail(ctx context.Context, workflowRunId string) (resp *workflowv1.Detail, err error) {
 	_, err = w.rest.R().
-		WithContext(ctx).
+		SetContext(ctx).
 		SetHeader("Authorization", "Bearer "+w.appKey).
 		SetResult(&resp).
 		Get("/workflows/run/" + workflowRunId)
@@ -78,7 +86,7 @@ func (w *workflow) Detail(ctx context.Context, workflowRunId string) (resp *work
 
 func (w *workflow) Logs(ctx context.Context, filter workflowv1.LogsRequest) (resp *workflowv1.LogsResponse, err error) {
 	_, err = w.rest.R().
-		WithContext(ctx).
+		SetContext(ctx).
 		SetHeader("Authorization", "Bearer "+w.appKey).
 		SetResult(&resp).
 		SetBody(filter).
@@ -91,7 +99,7 @@ func (w *workflow) Logs(ctx context.Context, filter workflowv1.LogsRequest) (res
 
 func (w *workflow) Stop(ctx context.Context, param workflowv1.StopRequest) (*workflowv1.StopResponse, error) {
 	_, err := w.rest.R().
-		WithContext(ctx).
+		SetContext(ctx).
 		SetHeader("Authorization", "Bearer "+w.appKey).
 		SetResult(&workflowv1.StopResponse{}).
 		SetBody(param).
